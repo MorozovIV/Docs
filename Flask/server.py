@@ -1,19 +1,25 @@
-from flask import Flask
+from collections import namedtuple
+
+from flask import Flask, render_template, redirect, url_for
+
 app = Flask(__name__)
 
-@app.route('/')
+Message = namedtuple('Message', 'text tag')
+messages = []
+
 @app.route('/index')
-def hello():
-    return "Hello World!"
-if __name__ == "__main__":
-    app.run()
+def index():
+    return render_template('index.html')
 
-'''
-from flask import Flask
-app = Flask(__name__)
-@app.route("/", methods=['GET'])
-def index(username):
-    return "Hello, %s!" % username
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=4567)
-'''
+
+@app.route('/main')
+def hello():
+    return render_template('main.html', messages=messages)
+
+@app.route('/add_message')
+def add_message():
+    return redirect(url_for('main'))
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
